@@ -139,7 +139,7 @@ def on_enter(e):
 def on_leave(e):
     e.widget['background'] = BUTTON_BG_COLOR
 
-# --- --- --- --- --- --- --- --- --- --- --- --- Configuração da Janela Principal --- --- --- --- --- --- --- --- --- --- --- --- #
+# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- Configuração da Janela Principal --- --- ------ --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 root = tk.Tk()
 root.title("Calculadora de Notas")
 root.geometry("600x850")
@@ -168,7 +168,7 @@ except FileNotFoundError:
 # definindo imagens
 imagem_calculadora = Image.open("images/calculate_24dp_black.png")
 imagem_confirma = Image.open("images/confirm_24dp_black.png")
-imagem_limpar= Image.open("images\cleaning_services_24dp_black.png")
+imagem_limpar= Image.open("images/cleaning_services_24dp_black.png")
 
 # Redimensiona para o tamanho desejado (por exemplo, 20x20 pixels)
 tamanho_desejado = (20, 20)
