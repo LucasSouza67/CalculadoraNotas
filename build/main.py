@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import os
 from PIL import Image, ImageTk
 
 # --- Variáveis Globais ---
@@ -25,15 +26,16 @@ def calcular_media_final(notas_n1, notas_n2):
     return media_final
 
 # Calcula a nota mínima necessária na última avaliação da N2 para obter média 7.
-def calcular_nota_minima(notas_n1_preenchidas, notas_n2_preenchidas):
-    global num_avaliacoes_n1, num_avaliacoes_n2
-    
+def calcular_nota_minima(notas_n1_preenchidas, notas_n2_preenchidas, total_av_n1, total_av_n2):
+    if not total_av_n1 or not total_av_n2:
+        return 0
+
     soma_n1 = sum(notas_n1_preenchidas)
     soma_n2 = sum(notas_n2_preenchidas)
-    
-    n1_calculada = soma_n1 / num_avaliacoes_n1
-    
-    nota_minima_av_ultima = ((35 - 2 * n1_calculada) * num_avaliacoes_n2 / 3) - soma_n2
+
+    n1_calculada = soma_n1 / total_av_n1
+
+    nota_minima_av_ultima = ((35 - 2 * n1_calculada) * total_av_n2 / 3) - soma_n2
     return nota_minima_av_ultima
 
 #  Funções da Interface Gráfica 
@@ -117,7 +119,7 @@ def acao_calcular_minima():
         messagebox.showwarning("Aviso", "Para calcular a nota mínima, preencha todas as notas de N1 e todas as notas de N2, exceto a última.")
         return
     
-    nota_minima = calcular_nota_minima(notas_n1, notas_n2)
+    nota_minima = calcular_nota_minima(notas_n1, notas_n2, num_avaliacoes_n1, num_avaliacoes_n2)
     
     if 0 <= nota_minima <= 10:
         label_resultado_minima.config(text=f"Nota mínima na última AV de N2: {nota_minima:.2f}", fg="#0000FF") # Exibe a o resultado da nota mínima
@@ -150,25 +152,39 @@ root.config(bg=BACKGROUND_COLOR)
 header_frame = tk.Frame(root, bg=BACKGROUND_COLOR, padx=15, pady=10)
 header_frame.pack(fill=tk.X, pady=(15, 0))
 
+# --- Caminho base para as imagens ---
+script_dir = os.path.dirname(os.path.abspath(__file__)) # Diretório do script atual (build)
+project_root = os.path.dirname(script_dir) # Sobe um nível para a raiz do projeto
+image_path = os.path.join(project_root, "src", "images")
+
 # --- Adicionando a Imagem ---
 try:
-    # Use o nome do arquivo da logomarca
-    imagem_logo_pil = Image.open("images/logoIFCE.png").resize((90, 90))
+    logo_path = os.path.join(image_path, "logoIFCE.png")
+    imagem_logo_pil = Image.open(logo_path).resize((120, 120))
     imagem_logo_tk = ImageTk.PhotoImage(imagem_logo_pil)
     
-    # Criando um Label para a imagem
     label_logo = tk.Label(header_frame, image=imagem_logo_tk, bg=BACKGROUND_COLOR)
-    label_logo.pack(side=tk.LEFT, padx=(0, 10))
     
-    # IMPORTANTE: Mantenha uma referência à imagem para evitar que ela seja removida pelo garbage collector
     label_logo.image = imagem_logo_tk
+    
+    # Título Principal da Janela
+    title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+
+    # USANDO O GRID PARA POSICIONAR AMBOS LADO A LADO
+    label_logo.grid(row=0, column=0, padx=(0, 50))
+    title_label.grid(row=0, column=1, sticky="w")
+    
 except FileNotFoundError:
     print("Aviso: Arquivo de imagem não encontrado. A logomarca não será exibida.")
+    # Título Principal da Janela (somente texto se a imagem falhar)
+    title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+    title_label.pack(anchor=tk.W)
+
 
 # definindo imagens
-imagem_calculadora = Image.open("images/calculate_24dp_black.png")
-imagem_confirma = Image.open("images/confirm_24dp_black.png")
-imagem_limpar= Image.open("images/cleaning_services_24dp_black.png")
+imagem_calculadora = Image.open(os.path.join(image_path, "calculate_24dp_black.png"))
+imagem_confirma = Image.open(os.path.join(image_path, "confirm_24dp_black.png"))
+imagem_limpar= Image.open(os.path.join(image_path, "cleaning_services_24dp_black.png"))
 
 # Redimensiona para o tamanho desejado (por exemplo, 20x20 pixels)
 tamanho_desejado = (20, 20)
@@ -182,9 +198,6 @@ imagem_conf = ImageTk.PhotoImage(imagem_confirma)
 imagem_clear = ImageTk.PhotoImage(imagem_limpar)
 # Exemplo de uso em um botão
 # tk.Button(..., image=imagem_tk, ...)
-
-title_label = tk.Label(root, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
-title_label.pack(pady=10)
 
 num_avaliacoes_frame = tk.Frame(root, padx=10, pady=10, bg=BACKGROUND_COLOR)
 num_avaliacoes_frame.pack(pady=5)
