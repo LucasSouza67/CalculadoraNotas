@@ -2,9 +2,6 @@
 
 Uma aplicação de desktop desenvolvida em Python com Tkinter que ajuda estudantes a calcular sua média final e a nota mínima necessária para a aprovação, com base nas notas das etapas N1 e N2.
 
-![Screenshot da Aplicação](caminho/para/sua/screenshot.png)
-> **Nota:** Substitua a imagem acima por uma captura de tela real do seu aplicativo!
-
 ---
 
 ## ✨ Funcionalidades
