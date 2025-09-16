@@ -8,14 +8,6 @@ entries = []
 num_avaliacoes_n1 = 0
 num_avaliacoes_n2 = 0
 
-# --- Variáveis Globais para Widgets (inicializadas como None) ---
-root = None
-entry_num_n1 = None
-entry_num_n2 = None
-input_frame_notas = None
-label_resultado_media = None
-label_resultado_minima = None
-
 # --- Paleta de Cores ---
 BACKGROUND_COLOR = "#f0f0f0"
 BUTTON_BG_COLOR = "#4a7a8c"
