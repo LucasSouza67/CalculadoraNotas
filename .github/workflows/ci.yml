@@ -1,0 +1,44 @@
+# Nome do workflow que aparecerá na aba "Actions" do GitHub
+name: CI - Testes Automatizados
+
+# Define os gatilhos (eventos) que iniciarão o workflow
+on:
+  # Executa no push para a branch 'main'
+  push:
+    branches: [ "main" ]
+  # Executa em pull requests direcionadas à branch 'main'
+  pull_request:
+    branches: [ "main" ]
+
+# Permite que você execute este workflow manualmente na aba Actions
+  workflow_dispatch:
+
+# Define os trabalhos (jobs) a serem executados.
+# Neste caso, temos apenas um job chamado 'build'.
+jobs:
+  build:
+    # O tipo de máquina virtual para executar o job.
+    # 'ubuntu-latest' é uma boa escolha padrão para projetos Python.
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clona o seu repositório para a máquina virtual
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Configura o ambiente Python
+      - name: Configurar Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # 3. Instala as dependências do projeto
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Executa os testes com pytest
+      - name: Executar testes
+        run: |
+          pytest
