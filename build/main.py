@@ -141,108 +141,105 @@ def on_enter(e):
 def on_leave(e):
     e.widget['background'] = BUTTON_BG_COLOR
 
-# --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- Configuração da Janela Principal --- --- ------ --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
-root = tk.Tk()
-root.title("Calculadora de Notas")
-root.geometry("600x850")
-root.resizable(False, False)
-root.config(bg=BACKGROUND_COLOR)
+def main():
+    """Cria e executa a interface gráfica principal da aplicação."""
+    global root, entry_num_n1, entry_num_n2, input_frame_notas, label_resultado_media, label_resultado_minima
 
-# Frame para o cabeçalho (logo e título)
-header_frame = tk.Frame(root, bg=BACKGROUND_COLOR, padx=15, pady=10)
-header_frame.pack(fill=tk.X, pady=(15, 0))
+    root = tk.Tk()
+    root.title("Calculadora de Notas")
+    root.geometry("600x850")
+    root.resizable(False, False)
+    root.config(bg=BACKGROUND_COLOR)
 
-# --- Caminho base para as imagens ---
-script_dir = os.path.dirname(os.path.abspath(__file__)) # Diretório do script atual (build)
-project_root = os.path.dirname(script_dir) # Sobe um nível para a raiz do projeto
-image_path = os.path.join(project_root, "src", "images")
+    # Frame para o cabeçalho (logo e título)
+    header_frame = tk.Frame(root, bg=BACKGROUND_COLOR, padx=15, pady=10)
+    header_frame.pack(fill=tk.X, pady=(15, 0))
 
-# --- Adicionando a Imagem ---
-try:
-    logo_path = os.path.join(image_path, "logoIFCE.png")
-    imagem_logo_pil = Image.open(logo_path).resize((120, 120))
-    imagem_logo_tk = ImageTk.PhotoImage(imagem_logo_pil)
-    
-    label_logo = tk.Label(header_frame, image=imagem_logo_tk, bg=BACKGROUND_COLOR)
-    
-    label_logo.image = imagem_logo_tk
-    
-    # Título Principal da Janela
-    title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+    # --- Caminho base para as imagens ---
+    script_dir = os.path.dirname(os.path.abspath(__file__)) # Diretório do script atual (build)
+    project_root = os.path.dirname(script_dir) # Sobe um nível para a raiz do projeto
+    image_path = os.path.join(project_root, "src", "images")
 
-    # USANDO O GRID PARA POSICIONAR AMBOS LADO A LADO
-    label_logo.grid(row=0, column=0, padx=(0, 50))
-    title_label.grid(row=0, column=1, sticky="w")
-    
-except FileNotFoundError:
-    print("Aviso: Arquivo de imagem não encontrado. A logomarca não será exibida.")
-    # Título Principal da Janela (somente texto se a imagem falhar)
-    title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
-    title_label.pack(anchor=tk.W)
+    # --- Adicionando a Imagem ---
+    try:
+        logo_path = os.path.join(image_path, "logoIFCE.png")
+        imagem_logo_pil = Image.open(logo_path).resize((120, 120))
+        imagem_logo_tk = ImageTk.PhotoImage(imagem_logo_pil)
+        
+        label_logo = tk.Label(header_frame, image=imagem_logo_tk, bg=BACKGROUND_COLOR)
+        label_logo.image = imagem_logo_tk
+        
+        title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
 
+        label_logo.grid(row=0, column=0, padx=(0, 50))
+        title_label.grid(row=0, column=1, sticky="w")
+        
+    except FileNotFoundError:
+        print("Aviso: Arquivo de imagem não encontrado. A logomarca não será exibida.")
+        title_label = tk.Label(header_frame, text="Calculadora de Notas", font=("Helvetica", 16, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+        title_label.pack(anchor=tk.W)
 
-# definindo imagens
-imagem_calculadora = Image.open(os.path.join(image_path, "calculate_24dp_black.png"))
-imagem_confirma = Image.open(os.path.join(image_path, "confirm_24dp_black.png"))
-imagem_limpar= Image.open(os.path.join(image_path, "cleaning_services_24dp_black.png"))
+    # definindo imagens
+    imagem_calculadora = Image.open(os.path.join(image_path, "calculate_24dp_black.png"))
+    imagem_confirma = Image.open(os.path.join(image_path, "confirm_24dp_black.png"))
+    imagem_limpar= Image.open(os.path.join(image_path, "cleaning_services_24dp_black.png"))
 
-# Redimensiona para o tamanho desejado (por exemplo, 20x20 pixels)
-tamanho_desejado = (20, 20)
-imagem_calculadora = imagem_calculadora.resize(tamanho_desejado, Image.Resampling.LANCZOS)
-imagem_confirma = imagem_confirma.resize(tamanho_desejado, Image.Resampling.LANCZOS)
-imagem_limpar = imagem_limpar.resize(tamanho_desejado, Image.Resampling.LANCZOS)
+    tamanho_desejado = (20, 20)
+    imagem_calculadora = imagem_calculadora.resize(tamanho_desejado, Image.Resampling.LANCZOS)
+    imagem_confirma = imagem_confirma.resize(tamanho_desejado, Image.Resampling.LANCZOS)
+    imagem_limpar = imagem_limpar.resize(tamanho_desejado, Image.Resampling.LANCZOS)
 
-# Converte para o formato que o Tkinter entende
-imagem_calc = ImageTk.PhotoImage(imagem_calculadora)
-imagem_conf = ImageTk.PhotoImage(imagem_confirma)
-imagem_clear = ImageTk.PhotoImage(imagem_limpar)
-# Exemplo de uso em um botão
-# tk.Button(..., image=imagem_tk, ...)
+    imagem_calc = ImageTk.PhotoImage(imagem_calculadora)
+    imagem_conf = ImageTk.PhotoImage(imagem_confirma)
+    imagem_clear = ImageTk.PhotoImage(imagem_limpar)
 
-num_avaliacoes_frame = tk.Frame(root, padx=10, pady=10, bg=BACKGROUND_COLOR)
-num_avaliacoes_frame.pack(pady=5)
+    num_avaliacoes_frame = tk.Frame(root, padx=10, pady=10, bg=BACKGROUND_COLOR)
+    num_avaliacoes_frame.pack(pady=5)
 
-input_frame_notas = tk.Frame(root, padx=15, pady=5, bg=BACKGROUND_COLOR)
-input_frame_notas.pack(pady=5)
+    input_frame_notas = tk.Frame(root, padx=15, pady=5, bg=BACKGROUND_COLOR)
+    input_frame_notas.pack(pady=5)
 
-button_frame = tk.Frame(root, padx=15, pady=10, bg=BACKGROUND_COLOR)
-button_frame.pack(pady=5)
+    button_frame = tk.Frame(root, padx=15, pady=10, bg=BACKGROUND_COLOR)
+    button_frame.pack(pady=5)
 
-result_frame = tk.Frame(root, padx=15, pady=15, bg=BACKGROUND_COLOR)
-result_frame.pack(pady=10)
+    result_frame = tk.Frame(root, padx=15, pady=15, bg=BACKGROUND_COLOR)
+    result_frame.pack(pady=10)
 
-tk.Label(num_avaliacoes_frame, text="Nº de Avaliações N1:", font=("Helvetica", 10, "bold"), fg=LABEL_COLOR, bg=BACKGROUND_COLOR).grid(row=0, column=0, pady=5, sticky='w')
-entry_num_n1 = tk.Entry(num_avaliacoes_frame, width=10, font=("Helvetica", 10), bg=ENTRY_BG_COLOR)
-entry_num_n1.grid(row=0, column=1, padx=5, pady=5)
+    tk.Label(num_avaliacoes_frame, text="Nº de Avaliações N1:", font=("Helvetica", 10, "bold"), fg=LABEL_COLOR, bg=BACKGROUND_COLOR).grid(row=0, column=0, pady=5, sticky='w')
+    entry_num_n1 = tk.Entry(num_avaliacoes_frame, width=10, font=("Helvetica", 10), bg=ENTRY_BG_COLOR)
+    entry_num_n1.grid(row=0, column=1, padx=5, pady=5)
 
-tk.Label(num_avaliacoes_frame, text="Nº de Avaliações N2:", font=("Helvetica", 10, "bold"), fg=LABEL_COLOR, bg=BACKGROUND_COLOR).grid(row=1, column=0, pady=5, sticky='w')
-entry_num_n2 = tk.Entry(num_avaliacoes_frame, width=10, font=("Helvetica", 10), bg=ENTRY_BG_COLOR)
-entry_num_n2.grid(row=1, column=1, padx=5, pady=5)
+    tk.Label(num_avaliacoes_frame, text="Nº de Avaliações N2:", font=("Helvetica", 10, "bold"), fg=LABEL_COLOR, bg=BACKGROUND_COLOR).grid(row=1, column=0, pady=5, sticky='w')
+    entry_num_n2 = tk.Entry(num_avaliacoes_frame, width=10, font=("Helvetica", 10), bg=ENTRY_BG_COLOR)
+    entry_num_n2.grid(row=1, column=1, padx=5, pady=5)
 
-btn_confirmar = tk.Button(num_avaliacoes_frame, text="Confirmar", command=criar_campos_entrada, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5,  image=imagem_conf, compound=tk.LEFT)
-btn_confirmar.grid(row=2, column=0, columnspan=2, pady=10)
-btn_confirmar.bind("<Enter>", on_enter)
-btn_confirmar.bind("<Leave>", on_leave)
+    btn_confirmar = tk.Button(num_avaliacoes_frame, text="Confirmar", command=criar_campos_entrada, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5,  image=imagem_conf, compound=tk.LEFT)
+    btn_confirmar.grid(row=2, column=0, columnspan=2, pady=10)
+    btn_confirmar.bind("<Enter>", on_enter)
+    btn_confirmar.bind("<Leave>", on_leave)
 
-btn_calcular_media = tk.Button(button_frame, text="Calcular Média Final", command=acao_calcular_media, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_calc, compound=tk.LEFT)
-btn_calcular_media.grid(row=0, column=0, padx=5, pady=5)
-btn_calcular_media.bind("<Enter>", on_enter)
-btn_calcular_media.bind("<Leave>", on_leave)
+    btn_calcular_media = tk.Button(button_frame, text="Calcular Média Final", command=acao_calcular_media, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_calc, compound=tk.LEFT)
+    btn_calcular_media.grid(row=0, column=0, padx=5, pady=5)
+    btn_calcular_media.bind("<Enter>", on_enter)
+    btn_calcular_media.bind("<Leave>", on_leave)
 
-btn_calcular_minima = tk.Button(button_frame, text="Calcular Nota Mínima", command=acao_calcular_minima, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_calc, compound=tk.LEFT)
-btn_calcular_minima.grid(row=0, column=1, padx=5, pady=5)
-btn_calcular_minima.bind("<Enter>", on_enter)
-btn_calcular_minima.bind("<Leave>", on_leave)
+    btn_calcular_minima = tk.Button(button_frame, text="Calcular Nota Mínima", command=acao_calcular_minima, font=("Helvetica", 10, "bold"), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_calc, compound=tk.LEFT)
+    btn_calcular_minima.grid(row=0, column=1, padx=5, pady=5)
+    btn_calcular_minima.bind("<Enter>", on_enter)
+    btn_calcular_minima.bind("<Leave>", on_leave)
 
-btn_limpar = tk.Button(button_frame, text="Limpar", command=limpar_campos, font=("Helvetica", 10), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_clear, compound=tk.LEFT)
-btn_limpar.grid(row=1, column=0, columnspan=2, pady=5)
-btn_limpar.bind("<Enter>", on_enter)
-btn_limpar.bind("<Leave>", on_leave)
+    btn_limpar = tk.Button(button_frame, text="Limpar", command=limpar_campos, font=("Helvetica", 10), bg=BUTTON_BG_COLOR, fg=BUTTON_FG_COLOR, relief="flat", padx=10, pady=5, image=imagem_clear, compound=tk.LEFT)
+    btn_limpar.grid(row=1, column=0, columnspan=2, pady=5)
+    btn_limpar.bind("<Enter>", on_enter)
+    btn_limpar.bind("<Leave>", on_leave)
 
-label_resultado_media = tk.Label(result_frame, text="", font=("Helvetica", 12, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
-label_resultado_media.pack(pady=5)
+    label_resultado_media = tk.Label(result_frame, text="", font=("Helvetica", 12, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+    label_resultado_media.pack(pady=5)
 
-label_resultado_minima = tk.Label(result_frame, text="", font=("Helvetica", 12, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
-label_resultado_minima.pack(pady=5)
+    label_resultado_minima = tk.Label(result_frame, text="", font=("Helvetica", 12, "bold"), bg=BACKGROUND_COLOR, fg=LABEL_COLOR)
+    label_resultado_minima.pack(pady=5)
 
-root.mainloop()
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
